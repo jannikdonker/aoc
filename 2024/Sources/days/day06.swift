@@ -32,9 +32,11 @@ class Day06: Day {
                 let nextPosition = [pPosition[0] + pDirection[0], pPosition[1] + pDirection[1]]
                 pMap[nextPosition[1]][nextPosition[0]] = "#"
             }
-            var pVisited: [[String : [Int]]] = [["position": pPosition, "direction": pDirection]]
+            var pVisited: Set<[String: [Int]]> = [["position": pPosition, "direction": pDirection]]
             var isLoop = false
+            var counter = 0
             while nextPositionInBounds(pPosition, pDirection) && !isLoop {
+                counter += 1
                 let nextPosition = [pPosition[0] + pDirection[0], pPosition[1] + pDirection[1]]
 
                 if pMap[nextPosition[1]][nextPosition[0]] == "#" {
@@ -46,13 +48,12 @@ class Day06: Day {
                 }
 
                 pPosition = nextPosition
-                if #available(macOS 13.0, *) {
-                    if pVisited.contains([["position": pPosition, "direction": pDirection]]) {
-                        isLoop = true
-                        break
-                    }
+                if !pVisited.insert(["position": pPosition, "direction": pDirection]).inserted {
+                    isLoop = true
+                    break
                 }
-                pVisited.append(["position": pPosition, "direction": pDirection])
+
+                pVisited.insert(["position": pPosition, "direction": pDirection])
 
             }
             return isLoop
@@ -62,9 +63,9 @@ class Day06: Day {
         var direction: [Int] = [0, 0]
         var position: [Int] = [0, 0]
         var startPosition = [0, 0]
-        var visited: [[String : [Int]]] = []
-        var loopPositions: [[Int]] = []
-        var loopPositionsChecked: [[Int]] = []
+        var visited: Set<[String: [Int]]> = []
+        var loopPositions: Set<[Int]> = []
+        var loopPositionsChecked: Set<[Int]> = []
 
         let lines = inputStr.components(separatedBy: .newlines)
 
@@ -86,7 +87,7 @@ class Day06: Day {
                     default:
                         direction = [0, -1]
                     }
-                    visited.append(["position": position, "direction": direction])
+                    visited.insert(["position": position, "direction": direction])
                     currentLine.append(".")
                 } else {
                     currentLine.append(char)
@@ -105,21 +106,15 @@ class Day06: Day {
                 continue
             }
 
-            print("Checking isLoop for position and direction: ", position, direction)
-            if nextPosition != startPosition && !loopPositions.contains(nextPosition) && !loopPositionsChecked.contains(nextPosition) {
-                loopPositionsChecked.append(nextPosition)
-                if isLoop(position, direction){
-                    loopPositions.append(nextPosition)
+            if nextPosition != startPosition && loopPositionsChecked.insert(nextPosition).inserted {
+                if isLoop(position, direction) {
+                    loopPositions.insert(nextPosition)
                 }
             }
 
             position = nextPosition
 
-            if visited.contains(["position": nextPosition, "direction": direction]) {
-                continue
-            }
-
-            visited.append(["position": nextPosition, "direction": direction])
+            visited.insert(["position": nextPosition, "direction": direction])
 
         }
 
