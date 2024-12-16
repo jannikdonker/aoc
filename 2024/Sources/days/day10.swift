@@ -70,7 +70,7 @@ class Day10: Day {
             }
         }
 
-        print("AOC 2024 Day 09")
+        print("AOC 2024 Day 10")
         print("Part 1 Answer: ", sum.1)
         print("Part 2 Answer: ", sum.0)
     }
