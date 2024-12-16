@@ -73,7 +73,7 @@ class Day11: Day {
         let elapsedTime = endTime - startTime
 
         print("Time elapsed: \(String(format: "%.3f", elapsedTime)) seconds")
-        print("AOC 2024 Day 09")
+        print("AOC 2024 Day 11")
         print("Part 1 Answer: ", sum)
         print("Part 2 Answer: ", sum2)
     }
